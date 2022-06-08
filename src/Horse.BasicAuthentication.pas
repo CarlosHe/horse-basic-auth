@@ -85,7 +85,12 @@ begin
   LPathInfo := Req.RawWebRequest.PathInfo;
   if LPathInfo = EmptyStr then
     LPathInfo := '/';
+
+  {$IF DEFINED(FPC)}
+  if MatchRoute(LPathInfo, Config.SkipRoutes) then
+  {$ELSE}
   if MatchText(LPathInfo, Config.SkipRoutes) then
+  {$ENDIF}
   begin
     Next();
     Exit;
